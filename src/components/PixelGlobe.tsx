@@ -7,7 +7,10 @@ const PixelGlobe = () => {
   const [networkData, setNetworkData] = useState({
     connections: 127,
     packets: 0,
-    bandwidth: '2.4 Mbps'
+    bandwidth: '2.4 Mbps',
+    ipAddress: '192.168.1.42',
+    browser: 'Chrome/121.0',
+    location: 'San Francisco, CA'
   });
 
   useEffect(() => {
@@ -80,6 +83,7 @@ const PixelGlobe = () => {
   useEffect(() => {
     const dataTimer = setInterval(() => {
       setNetworkData(prev => ({
+        ...prev,
         connections: prev.connections + Math.floor(Math.random() * 3) - 1,
         packets: prev.packets + Math.floor(Math.random() * 100),
         bandwidth: `${(Math.random() * 2 + 1.5).toFixed(1)} Mbps`
@@ -90,19 +94,27 @@ const PixelGlobe = () => {
   }, []);
 
   return (
-    <div className="flex items-center space-x-3">
-      <div className="relative">
-        <canvas 
-          ref={canvasRef}
-          className="border border-cyan-500/30"
-          style={{ imageRendering: 'pixelated' }}
-        />
-        <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+    <div className="space-y-3">
+      <div className="flex items-center space-x-3">
+        <div className="relative">
+          <canvas 
+            ref={canvasRef}
+            className="border border-cyan-500/30"
+            style={{ imageRendering: 'pixelated' }}
+          />
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+        <div className="text-xs space-y-1">
+          <div className="text-cyan-400">CONN: {networkData.connections}</div>
+          <div className="text-cyan-500">PKT: {networkData.packets}</div>
+          <div className="text-cyan-300">{networkData.bandwidth}</div>
+        </div>
       </div>
-      <div className="text-xs space-y-1">
-        <div className="text-cyan-400">CONN: {networkData.connections}</div>
-        <div className="text-cyan-500">PKT: {networkData.packets}</div>
-        <div className="text-cyan-300">{networkData.bandwidth}</div>
+      
+      <div className="border-t border-cyan-500/20 pt-2 space-y-1 text-xs">
+        <div className="text-cyan-400">IP: {networkData.ipAddress}</div>
+        <div className="text-cyan-500">UA: {networkData.browser}</div>
+        <div className="text-cyan-300">LOC: {networkData.location}</div>
       </div>
     </div>
   );
