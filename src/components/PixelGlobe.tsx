@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 
 const PixelGlobe = () => {
@@ -8,10 +7,48 @@ const PixelGlobe = () => {
     connections: 127,
     packets: 0,
     bandwidth: '2.4 Mbps',
-    ipAddress: '192.168.1.42',
-    browser: 'Chrome/121.0',
-    location: 'San Francisco, CA'
+    ipAddress: 'Loading...',
+    browser: 'Loading...',
+    location: 'Loading...'
   });
+
+  // Fetch real user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Get real browser info
+        const userAgent = navigator.userAgent;
+        const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/([0-9.]+)/);
+        const browserInfo = browserMatch ? `${browserMatch[1]}/${browserMatch[2]}` : 'Unknown Browser';
+
+        // Get real IP and location
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        setNetworkData(prev => ({
+          ...prev,
+          ipAddress: data.ip || 'Unknown',
+          browser: browserInfo,
+          location: data.city && data.region ? `${data.city}, ${data.region}` : 'Unknown Location'
+        }));
+      } catch (error) {
+        console.log('Could not fetch location data, using fallback');
+        // Fallback to basic browser info only
+        const userAgent = navigator.userAgent;
+        const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/([0-9.]+)/);
+        const browserInfo = browserMatch ? `${browserMatch[1]}/${browserMatch[2]}` : 'Unknown Browser';
+        
+        setNetworkData(prev => ({
+          ...prev,
+          ipAddress: 'Private Network',
+          browser: browserInfo,
+          location: 'Location Unavailable'
+        }));
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
