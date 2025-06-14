@@ -5,32 +5,36 @@ import { Code, Github } from 'lucide-react';
 const ProjectsSection = () => {
   const projects = [
     {
-      name: 'E-Commerce Platform',
-      description: 'Full-stack e-commerce solution with React, Node.js, and MongoDB',
-      tech: ['React', 'Node.js', 'MongoDB', 'Stripe'],
+      name: 'Online Examination System',
+      description: 'Full-stack examination platform with Admin, Teacher, and Student dashboards featuring secure user authentication and role-based access management',
+      tech: ['HTML', 'CSS', 'PHP', 'MySQL', 'APACHE'],
       status: 'Production',
-      lines: 15420
+      lines: 8500,
+      date: 'December 2023'
     },
     {
-      name: 'Data Visualization Dashboard',
-      description: 'Interactive analytics dashboard using D3.js and Python backend',
-      tech: ['D3.js', 'Python', 'FastAPI', 'PostgreSQL'],
+      name: 'MediBuddy - Healthcare Management',
+      description: 'Prescription processing and medical record management system using Tesseract OCR for text extraction with graphical dashboard',
+      tech: ['Flutter', 'Tesseract OCR', 'Supabase', 'LLM'],
       status: 'Development',
-      lines: 8930
+      lines: 12400,
+      date: 'December 2024'
     },
     {
-      name: 'Real-time Chat Application',
-      description: 'WebSocket-based chat app with user authentication and file sharing',
-      tech: ['Socket.io', 'Express', 'React', 'Redis'],
+      name: 'Web Security Protection Suite',
+      description: 'Security suite to prevent SQL injections, XSS, server-side forgery, and DDoS attacks with real-time monitoring and threat detection',
+      tech: ['Python', 'Docker', 'Grafana', 'Prometheus'],
       status: 'Production',
-      lines: 6750
+      lines: 6750,
+      date: 'December 2023'
     },
     {
       name: 'Portfolio Terminal UI',
-      description: 'Terminal-inspired portfolio website with boot animations',
+      description: 'Terminal-inspired portfolio website with Ubuntu boot animations and cyberpunk aesthetics',
       tech: ['React', 'TypeScript', 'Tailwind CSS'],
       status: 'Active',
-      lines: 3200
+      lines: 3200,
+      date: 'December 2024'
     }
   ];
 
@@ -52,6 +56,7 @@ const ProjectsSection = () => {
                 <h3 className="text-green-300 font-semibold">{project.name}</h3>
               </div>
               <div className="flex items-center space-x-2">
+                <span className="text-xs text-green-600">{project.date}</span>
                 <span className={`px-2 py-1 text-xs rounded ${
                   project.status === 'Production' ? 'bg-green-800 text-green-300' :
                   project.status === 'Development' ? 'bg-yellow-800 text-yellow-300' :
@@ -83,10 +88,10 @@ const ProjectsSection = () => {
       <div className="mt-6 p-3 bg-green-900/20 rounded border border-green-800">
         <div className="text-xs text-green-600">
           $ git log --oneline --graph<br/>
-          * feat: Add new portfolio project<br/>
-          * fix: Update project descriptions<br/>
-          * feat: Implement terminal UI design<br/>
-          * docs: Update README files
+          * feat: Add MediBuddy healthcare system<br/>
+          * fix: Security suite vulnerability patches<br/>
+          * feat: Implement examination system dashboard<br/>
+          * docs: Update project documentation
         </div>
       </div>
     </div>

@@ -4,54 +4,54 @@ import React from 'react';
 const ResumeSection = () => {
   const experience = [
     {
-      company: 'TechCorp Solutions',
-      position: 'Senior Full Stack Developer',
-      period: '2022 - Present',
-      description: 'Lead development of scalable web applications using React, Node.js, and AWS',
+      company: 'Surbhi Infotech',
+      position: 'Technical Trainer (Remote)',
+      period: 'April 2023 - October 2023',
+      description: 'Developed and implemented comprehensive training programs for students',
       achievements: [
-        'Reduced application load time by 40%',
-        'Led team of 4 developers',
-        'Implemented CI/CD pipeline'
+        'Designed diverse teaching methods utilizing practical demonstrations and exercises',
+        'Created detailed technical documentation for training materials',
+        'Acted as mentor providing guidance and assistance to trainees'
       ]
     },
     {
-      company: 'StartupXYZ',
-      position: 'Full Stack Developer',
-      period: '2020 - 2022',
-      description: 'Developed MVP and scaling infrastructure for B2B SaaS platform',
+      company: 'IT Jharkhand, India',
+      position: 'System Administration Intern',
+      period: 'October 2023',
+      description: 'Operating System Installation and computer system configuration',
       achievements: [
-        'Built platform from 0 to 10k users',
-        'Integrated payment systems',
-        'Optimized database performance'
-      ]
-    },
-    {
-      company: 'Digital Agency',
-      position: 'Frontend Developer',
-      period: '2019 - 2020',
-      description: 'Created responsive websites and web applications for various clients',
-      achievements: [
-        'Delivered 20+ client projects',
-        'Improved client satisfaction by 25%',
-        'Mentored junior developers'
+        'Installed multiple operating systems on various hardware setups',
+        'Assembled and configured computer systems from ground up',
+        'Set up Wi-Fi networks and ensured secure connections',
+        'Diagnosed and resolved technical issues related to hardware and software'
       ]
     }
   ];
 
   const education = [
     {
-      degree: 'Computer Science, B.S.',
-      school: 'Tech University',
-      period: '2015 - 2019',
-      gpa: '3.8/4.0'
+      degree: 'B.Tech in Computer Science',
+      school: 'Sahyadri College of Engineering and Management',
+      period: '2022 - Present',
+      gpa: '7.0/10',
+      location: 'Mangalore, Karnataka',
+      graduation: 'Expected May 2026'
     }
   ];
 
-  const certifications = [
-    'AWS Certified Developer',
-    'Google Cloud Platform Professional',
-    'MongoDB Certified Developer',
-    'React Advanced Certification'
+  const activities = [
+    'Flagship Innovation Challenge of Eximus 2023, IIM Bangalore Entrepreneurship Summit by Unistop',
+    'Cyber Tuesday: Web Security Alchemy Workshop JEI CSE Sahyadri Chapter'
+  ];
+
+  const coursework = [
+    'Data Structures & Algorithms',
+    'Machine Learning',
+    'Artificial Intelligence', 
+    'Object-Oriented Programming',
+    'Digital Infrastructure',
+    'Cybersecurity',
+    'Software Development'
   ];
 
   return (
@@ -60,6 +60,27 @@ const ResumeSection = () => {
         <h2 className="text-green-300 text-xl mb-2">$ cat resume.md</h2>
       </div>
       
+      {/* Education */}
+      <div className="mb-6">
+        <h3 className="text-green-400 text-lg mb-3">## Education</h3>
+        {education.map((edu, index) => (
+          <div key={index} className="p-4 bg-green-900/20 rounded border border-green-800">
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <h4 className="text-green-300 font-semibold">{edu.degree}</h4>
+                <div className="text-green-500 text-sm">{edu.school}</div>
+                <div className="text-green-600 text-xs">{edu.location}</div>
+                <div className="text-green-600 text-xs">CGPA: {edu.gpa}</div>
+              </div>
+              <div className="text-right">
+                <span className="text-green-600 text-sm">{edu.period}</span>
+                <div className="text-green-500 text-xs">{edu.graduation}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Experience */}
       <div className="mb-6">
         <h3 className="text-green-400 text-lg mb-3">## Experience</h3>
@@ -88,30 +109,25 @@ const ResumeSection = () => {
         </div>
       </div>
       
-      {/* Education */}
+      {/* Relevant Coursework */}
       <div className="mb-6">
-        <h3 className="text-green-400 text-lg mb-3">## Education</h3>
-        {education.map((edu, index) => (
-          <div key={index} className="p-4 bg-green-900/20 rounded border border-green-800">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-green-300 font-semibold">{edu.degree}</h4>
-                <div className="text-green-500 text-sm">{edu.school}</div>
-                <div className="text-green-600 text-xs">GPA: {edu.gpa}</div>
-              </div>
-              <span className="text-green-600 text-sm">{edu.period}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {/* Certifications */}
-      <div className="mb-6">
-        <h3 className="text-green-400 text-lg mb-3">## Certifications</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {certifications.map((cert, index) => (
+        <h3 className="text-green-400 text-lg mb-3">## Relevant Coursework</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {coursework.map((course, index) => (
             <div key={index} className="p-2 bg-green-900/20 rounded border border-green-800">
-              <span className="text-green-500 text-sm">✓ {cert}</span>
+              <span className="text-green-500 text-sm">• {course}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Activities */}
+      <div className="mb-6">
+        <h3 className="text-green-400 text-lg mb-3">## Activities</h3>
+        <div className="space-y-2">
+          {activities.map((activity, index) => (
+            <div key={index} className="p-3 bg-green-900/20 rounded border border-green-800">
+              <span className="text-green-500 text-sm">✓ {activity}</span>
             </div>
           ))}
         </div>
@@ -120,7 +136,7 @@ const ResumeSection = () => {
       <div className="p-3 bg-green-900/20 rounded border border-green-800">
         <div className="text-xs text-green-600">
           $ wc -l resume.md<br/>
-          42 resume.md
+          89 resume.md
         </div>
       </div>
     </div>

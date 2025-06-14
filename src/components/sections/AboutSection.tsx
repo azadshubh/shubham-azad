@@ -5,29 +5,33 @@ const AboutSection = () => {
   const [displayText, setDisplayText] = useState('');
   const fullText = `$ cat about.txt
 
-Hello, I'm a Full Stack Developer with a passion for creating 
-innovative digital solutions. I specialize in modern web 
-technologies and enjoy building applications that make a 
-difference.
+Hello, I'm Shubham Azad, a Computer Science enthusiast and aspiring 
+Full Stack Developer currently pursuing my B.Tech in Computer Science 
+from Sahyadri College of Engineering and Management.
 
-With expertise in React, Node.js, Python, and cloud technologies,
-I've contributed to various projects ranging from e-commerce 
-platforms to data visualization tools.
+With a strong foundation in cybersecurity, software development, and 
+emerging technologies, I specialize in building secure and scalable 
+web applications using modern tech stacks.
 
-When I'm not coding, you can find me exploring new technologies,
-contributing to open-source projects, or enjoying a good cup of 
-coffee while planning the next big idea.
+My expertise spans across multiple programming languages including 
+C/C++, Java, Python, JavaScript, and frameworks like React.js, 
+Node.js, and Flutter. I'm passionate about machine learning, 
+artificial intelligence, and cybersecurity.
 
-Currently based in San Francisco, always excited about new 
-opportunities and collaborations.
+When I'm not coding, you can find me exploring digital infrastructure,
+contributing to open-source projects, or working on innovative solutions
+that bridge the gap between technology and real-world problems.
+
+Currently based in Mangalore, Karnataka, always eager to learn and 
+collaborate on exciting projects that make a meaningful impact.
 
 $ ls -la personal/
-drwxr-xr-x  2 dev dev 4096 Dec 14 2024 hobbies/
--rw-r--r--  1 dev dev  512 Dec 14 2024 interests.txt
--rw-r--r--  1 dev dev  256 Dec 14 2024 goals.md
 drwxr-xr-x  2 dev dev 4096 Dec 14 2024 projects/
+-rw-r--r--  1 dev dev  512 Dec 14 2024 certifications.txt
+-rw-r--r--  1 dev dev  256 Dec 14 2024 achievements.md
+drwxr-xr-x  2 dev dev 4096 Dec 14 2024 internships/
 
-$ echo "Always learning, always building."`;
+$ echo "Always learning, always innovating."`;
 
   useEffect(() => {
     let index = 0;
@@ -59,19 +63,19 @@ $ echo "Always learning, always building."`;
         <div className="grid grid-cols-2 gap-4 text-xs">
           <div>
             <span className="text-green-600">Location:</span>
-            <span className="text-green-400 ml-2">San Francisco, CA</span>
+            <span className="text-green-400 ml-2">Mangalore, Karnataka</span>
           </div>
           <div>
             <span className="text-green-600">Role:</span>
-            <span className="text-green-400 ml-2">Full Stack Developer</span>
+            <span className="text-green-400 ml-2">CS Undergraduate</span>
           </div>
           <div>
-            <span className="text-green-600">Experience:</span>
-            <span className="text-green-400 ml-2">5+ Years</span>
+            <span className="text-green-600">CGPA:</span>
+            <span className="text-green-400 ml-2">7.0/10</span>
           </div>
           <div>
             <span className="text-green-600">Focus:</span>
-            <span className="text-green-400 ml-2">Web Technologies</span>
+            <span className="text-green-400 ml-2">Full Stack Development</span>
           </div>
         </div>
       </div>

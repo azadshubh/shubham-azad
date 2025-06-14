@@ -4,37 +4,44 @@ import React from 'react';
 const SkillsSection = () => {
   const skillCategories = [
     {
-      category: 'Frontend',
+      category: 'Programming Languages',
       skills: [
-        { name: 'React/Next.js', level: 95, years: 4 },
-        { name: 'TypeScript', level: 90, years: 3 },
-        { name: 'Tailwind CSS', level: 88, years: 2 },
-        { name: 'Vue.js', level: 75, years: 2 }
+        { name: 'C/C++', level: 90, years: 3 },
+        { name: 'Java', level: 85, years: 2 },
+        { name: 'Python', level: 88, years: 2 },
+        { name: 'JavaScript', level: 82, years: 2 },
+        { name: 'Dart', level: 75, years: 1 },
+        { name: 'PHP', level: 80, years: 2 }
       ]
     },
     {
-      category: 'Backend',
+      category: 'Developer Tools',
       skills: [
-        { name: 'Node.js', level: 92, years: 4 },
-        { name: 'Python', level: 85, years: 3 },
-        { name: 'PostgreSQL', level: 80, years: 3 },
-        { name: 'MongoDB', level: 78, years: 2 }
+        { name: 'VS Code', level: 95, years: 3 },
+        { name: 'Git', level: 88, years: 2 },
+        { name: 'GitHub', level: 85, years: 2 },
+        { name: 'Docker', level: 78, years: 1 },
+        { name: 'Bash Script', level: 80, years: 2 }
       ]
     },
     {
-      category: 'DevOps',
+      category: 'Technologies/Frameworks',
       skills: [
-        { name: 'Docker', level: 82, years: 3 },
-        { name: 'AWS', level: 78, years: 2 },
-        { name: 'CI/CD', level: 75, years: 2 },
-        { name: 'Kubernetes', level: 65, years: 1 }
+        { name: 'Flutter', level: 82, years: 1 },
+        { name: 'Node.js', level: 80, years: 2 },
+        { name: 'React.js', level: 85, years: 2 },
+        { name: 'Next.js', level: 75, years: 1 },
+        { name: 'Linux', level: 88, years: 3 },
+        { name: 'Grafana', level: 70, years: 1 },
+        { name: 'Prometheus', level: 68, years: 1 }
       ]
     }
   ];
 
-  const tools = [
-    'VS Code', 'Git', 'Postman', 'Figma', 'Jira', 'Slack', 
-    'Terminal', 'Chrome DevTools', 'Webpack', 'Vite'
+  const specializations = [
+    'Cybersecurity', 'Software Development', 'Data Structures & Algorithms',
+    'Machine Learning', 'Artificial Intelligence', 'Object-Oriented Programming',
+    'Digital Infrastructure', 'Web Security', 'Database Management'
   ];
 
   return (
@@ -47,7 +54,7 @@ const SkillsSection = () => {
         {skillCategories.map((category, index) => (
           <div key={index}>
             <h3 className="text-green-400 text-lg mb-3">
-              └── {category.category.toLowerCase()}/
+              └── {category.category.toLowerCase().replace(/\s+/g, '_')}/
             </h3>
             
             <div className="space-y-3 ml-4">
@@ -71,11 +78,11 @@ const SkillsSection = () => {
       </div>
       
       <div className="mt-6">
-        <h3 className="text-green-400 text-lg mb-3">$ which tools</h3>
+        <h3 className="text-green-400 text-lg mb-3">$ cat specializations.txt</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {tools.map((tool, index) => (
+          {specializations.map((spec, index) => (
             <div key={index} className="p-2 bg-green-900/20 rounded border border-green-800 text-center">
-              <span className="text-green-500 text-sm">{tool}</span>
+              <span className="text-green-500 text-sm">{spec}</span>
             </div>
           ))}
         </div>
@@ -84,7 +91,7 @@ const SkillsSection = () => {
       <div className="mt-6 p-3 bg-green-900/20 rounded border border-green-800">
         <div className="text-xs text-green-600">
           $ uptime<br/>
-          Learning new technologies for 5+ years, 0 users, load average: always high
+          Learning new technologies for 3+ years, CGPA: 7.0, load average: always high
         </div>
       </div>
     </div>
