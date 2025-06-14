@@ -161,13 +161,13 @@ const PixelGlobe = () => {
           WORLD VIEW
         </div>
         <div className="absolute top-1 right-1 text-xs text-cyan-600 font-mono">
-          GLOBAL NETWORK MAP
+          LAT/LON
         </div>
         <div className="absolute bottom-1 left-1 text-xs text-cyan-500 font-mono">
-          ENDPOINT LAT/LON
+          12.8759
         </div>
         <div className="absolute bottom-1 right-1 text-xs text-cyan-400 font-mono">
-          12.8759, 77.591
+          77.5910
         </div>
         
         <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
