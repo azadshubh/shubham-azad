@@ -39,7 +39,7 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <div className="h-full">
+    <div className="h-full overflow-y-auto max-h-96">
       <div className="mb-4">
         <h2 className="text-green-300 text-xl mb-2">$ ls -la /projects</h2>
         <div className="text-xs text-green-600">

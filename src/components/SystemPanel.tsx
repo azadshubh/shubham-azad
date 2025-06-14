@@ -43,7 +43,7 @@ const SystemPanel = () => {
   };
 
   return (
-    <div className="space-y-4 h-full">
+    <div className="space-y-4 h-full overflow-y-auto">
       {/* System Stats */}
       <div className="terminal-panel p-4">
         <h3 className="text-green-300 mb-3">$ system status</h3>
@@ -68,9 +68,9 @@ const SystemPanel = () => {
       </div>
 
       {/* Activity Monitor */}
-      <div className="terminal-panel p-4 flex-1">
+      <div className="terminal-panel p-4 flex-1 min-h-0">
         <h3 className="text-green-300 mb-3">$ tail -f /var/log/portfolio</h3>
-        <div className="space-y-1 text-xs">
+        <div className="space-y-1 text-xs overflow-y-auto max-h-48">
           {logs.map((log, index) => (
             <div key={index} className="text-green-600 hover:text-green-400 transition-colors">
               {log}

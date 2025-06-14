@@ -45,7 +45,7 @@ const SkillsSection = () => {
   ];
 
   return (
-    <div className="h-full">
+    <div className="h-full overflow-y-auto max-h-96">
       <div className="mb-4">
         <h2 className="text-green-300 text-xl mb-2">$ cat /proc/skills</h2>
       </div>

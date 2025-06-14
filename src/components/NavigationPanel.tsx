@@ -18,7 +18,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ currentSection, onNav
 
   return (
     <div className="terminal-panel h-full flex flex-col">
-      <div className="flex-1 overflow-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 max-h-full">
         <div className="mb-4">
           <h2 className="text-green-300 text-lg mb-2">$ ls -la /portfolio</h2>
           <div className="text-xs text-green-600">
