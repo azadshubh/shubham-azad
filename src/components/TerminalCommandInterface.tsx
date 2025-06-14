@@ -1,5 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface TerminalCommandInterfaceProps {
   onCommand: (command: string) => void;
@@ -16,6 +17,8 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [executedCommands, setExecutedCommands] = useState<string[]>([]);
+  const [showQuickCommands, setShowQuickCommands] = useState(true);
+  const [showNavigationCommands, setShowNavigationCommands] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const sectionCommands = {
@@ -96,56 +99,86 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
   return (
     <div className="mb-6">
       <div className="mb-4">
-        <div className="text-green-400 text-sm mb-2">
+        <div className="text-cyan-400 text-sm mb-2">
           {currentSection}@portfolio:~$ 
         </div>
         <form onSubmit={handleSubmit} className="flex items-center">
-          <span className="text-green-400 mr-2">$</span>
+          <span className="text-cyan-400 mr-2">$</span>
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent border-none outline-none text-green-300 font-mono"
+            className="flex-1 bg-transparent border-none outline-none text-cyan-300 font-mono"
             placeholder={`Type a command (e.g., ${quickCommands[0] || 'help'})`}
           />
         </form>
       </div>
       
       {quickCommands.length > 0 && (
-        <div className="mb-4 p-3 bg-green-900/10 rounded border border-green-800">
-          <div className="text-green-600 text-xs mb-2">Quick Commands:</div>
-          <div className="flex flex-wrap gap-2">
-            {quickCommands.map((cmd, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setInput(cmd);
-                  setExecutedCommands(prev => [...prev, cmd]);
-                  onCommand(cmd);
-                }}
-                className="px-2 py-1 bg-green-800/30 text-green-400 text-xs rounded hover:bg-green-800/50 transition-colors"
-              >
-                {cmd}
-              </button>
-            ))}
-          </div>
+        <div className="mb-4 border border-cyan-800/30 bg-black/20">
+          <button
+            onClick={() => setShowQuickCommands(!showQuickCommands)}
+            className="w-full flex items-center justify-between p-3 text-cyan-400 hover:bg-cyan-900/10 transition-colors"
+          >
+            <span className="text-xs">Quick Commands:</span>
+            {showQuickCommands ? (
+              <ChevronDown size={16} className="text-cyan-600" />
+            ) : (
+              <ChevronRight size={16} className="text-cyan-600" />
+            )}
+          </button>
+          
+          {showQuickCommands && (
+            <div className="p-3 pt-0">
+              <div className="flex flex-wrap gap-2">
+                {quickCommands.map((cmd, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setInput(cmd);
+                      setExecutedCommands(prev => [...prev, cmd]);
+                      onCommand(cmd);
+                    }}
+                    className="px-2 py-1 bg-cyan-800/30 text-cyan-400 text-xs border border-cyan-700/50 hover:bg-cyan-800/50 transition-colors"
+                  >
+                    {cmd}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
       
-      <div className="mb-4 p-3 bg-green-900/10 rounded border border-green-800">
-        <div className="text-green-600 text-xs mb-2">Navigation Commands:</div>
-        <div className="text-green-500 text-xs space-y-1">
-          <div>• Type "projects" or "project" to go to projects section</div>
-          <div>• Type "about", "skills", "resume", or "contact" to navigate</div>
-        </div>
+      <div className="mb-4 border border-cyan-800/30 bg-black/20">
+        <button
+          onClick={() => setShowNavigationCommands(!showNavigationCommands)}
+          className="w-full flex items-center justify-between p-3 text-cyan-400 hover:bg-cyan-900/10 transition-colors"
+        >
+          <span className="text-xs">Navigation Commands:</span>
+          {showNavigationCommands ? (
+            <ChevronDown size={16} className="text-cyan-600" />
+          ) : (
+            <ChevronRight size={16} className="text-cyan-600" />
+          )}
+        </button>
+        
+        {showNavigationCommands && (
+          <div className="p-3 pt-0">
+            <div className="text-cyan-500 text-xs space-y-1">
+              <div>• Type "projects" or "project" to go to projects section</div>
+              <div>• Type "about", "skills", "resume", or "contact" to navigate</div>
+            </div>
+          </div>
+        )}
       </div>
       
       {executedCommands.length > 0 && (
         <div className="mb-4">
-          <div className="text-green-600 text-xs mb-2">Executed Commands:</div>
-          <div className="text-green-500 text-xs space-y-1 max-h-20 overflow-y-auto">
+          <div className="text-cyan-600 text-xs mb-2">Executed Commands:</div>
+          <div className="text-cyan-500 text-xs space-y-1 max-h-20 overflow-y-auto">
             {executedCommands.slice(-5).map((cmd, index) => (
               <div key={index}>$ {cmd}</div>
             ))}
