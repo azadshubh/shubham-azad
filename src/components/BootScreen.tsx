@@ -49,18 +49,18 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
-    }, 500);
+    }, 300);
 
     return () => clearInterval(cursorInterval);
   }, []);
 
-  // Typewriter effect
+  // Typewriter effect with increased speed
   useEffect(() => {
     if (currentLineIndex >= consoleLines.length) {
       setIsComplete(true);
       setTimeout(() => {
         onComplete();
-      }, 1500);
+      }, 800);
       return;
     }
 
@@ -74,20 +74,22 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
           return newLines;
         });
         setCurrentCharIndex(prev => prev + 1);
-      }, Math.random() * 50 + 20); // Random typing speed between 20-70ms
+      }, Math.random() * 15 + 5); // Faster typing: 5-20ms instead of 20-70ms
 
       return () => clearTimeout(typingTimeout);
     } else {
-      // Line completed, move to next line
+      // Line completed, move to next line faster
       const nextLineTimeout = setTimeout(() => {
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
         setDisplayedLines(prev => [...prev, '']);
-      }, 100);
+      }, 30); // Faster line completion: 30ms instead of 100ms
 
       return () => clearTimeout(nextLineTimeout);
     }
   }, [currentLineIndex, currentCharIndex, onComplete]);
+
+  const progressPercentage = Math.min(Math.round((currentLineIndex / consoleLines.length) * 100), 100);
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono p-4 overflow-hidden">
@@ -105,37 +107,40 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
             <div key={index} className="min-h-[20px]">
               <span className="text-green-400">{line}</span>
               {index === currentLineIndex && showCursor && (
-                <span className="bg-green-400 text-black ml-1 animate-pulse">█</span>
+                <span className="bg-green-400 text-black ml-1">█</span>
               )}
             </div>
           ))}
         </div>
 
-        {/* Progress Indicator */}
-        {!isComplete && (
-          <div className="fixed bottom-8 left-4 right-4 max-w-4xl mx-auto">
-            <div className="bg-gray-900/80 border border-green-500/30 p-3 rounded">
-              <div className="flex items-center justify-between text-xs text-green-300 mb-2">
-                <span>BOOT PROGRESS</span>
-                <span>{Math.min(Math.round((currentLineIndex / consoleLines.length) * 100), 100)}%</span>
-              </div>
-              <div className="w-full bg-gray-800 h-2 rounded">
-                <div 
-                  className="bg-green-500 h-2 rounded transition-all duration-300 glow-green"
-                  style={{ width: `${Math.min((currentLineIndex / consoleLines.length) * 100, 100)}%` }}
-                />
-              </div>
+        {/* Progress Indicator - Always visible until complete */}
+        <div className="fixed bottom-8 left-4 right-4 max-w-4xl mx-auto">
+          <div className="bg-gray-900/90 border border-green-500/30 p-3 rounded backdrop-blur-sm">
+            <div className="flex items-center justify-between text-xs text-green-300 mb-2">
+              <span>BOOT PROGRESS</span>
+              <span>{progressPercentage}%</span>
             </div>
+            <div className="w-full bg-gray-800 h-2 rounded overflow-hidden">
+              <div 
+                className="bg-green-500 h-2 transition-all duration-200 glow-green"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+            {progressPercentage === 100 && (
+              <div className="text-center text-green-300 text-xs mt-2 animate-pulse">
+                SYSTEM READY - LOADING INTERFACE...
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Loading Dots Animation */}
         {!isComplete && (
           <div className="fixed top-4 right-4">
             <div className="flex space-x-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.15s' }}></div>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
             </div>
           </div>
         )}
