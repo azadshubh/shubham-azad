@@ -38,6 +38,7 @@ const TerminalInterface = () => {
             <ContentPanel 
               section={currentSection}
               isTransitioning={isTransitioning}
+              onNavigate={handleNavigation}
             />
           </div>
           

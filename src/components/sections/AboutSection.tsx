@@ -11,25 +11,8 @@ from Sahyadri College of Engineering and Management.
 
 With a strong foundation in cybersecurity, software development, and 
 emerging technologies, I specialize in building secure and scalable 
-web applications using modern tech stacks.
-
-My expertise spans across multiple programming languages including 
-C/C++, Java, Python, JavaScript, and frameworks like React.js, 
-Node.js, and Flutter. I'm passionate about machine learning, 
-artificial intelligence, and cybersecurity.
-
-When I'm not coding, you can find me exploring digital infrastructure,
-contributing to open-source projects, or working on innovative solutions
-that bridge the gap between technology and real-world problems.
-
-Currently based in Mangalore, Karnataka, always eager to learn and 
-collaborate on exciting projects that make a meaningful impact.
-
-$ ls -la personal/
-drwxr-xr-x  2 dev dev 4096 Dec 14 2024 projects/
--rw-r--r--  1 dev dev  512 Dec 14 2024 certifications.txt
--rw-r--r--  1 dev dev  256 Dec 14 2024 achievements.md
-drwxr-xr-x  2 dev dev 4096 Dec 14 2024 internships/
+web applications using modern tech stacks including React.js, Node.js, 
+Python, and Flutter.
 
 $ echo "Always learning, always innovating."`;
 

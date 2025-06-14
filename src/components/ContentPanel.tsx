@@ -10,9 +10,10 @@ import TerminalCommandInterface from './TerminalCommandInterface';
 interface ContentPanelProps {
   section: string;
   isTransitioning: boolean;
+  onNavigate?: (section: string) => void;
 }
 
-const ContentPanel: React.FC<ContentPanelProps> = ({ section, isTransitioning }) => {
+const ContentPanel: React.FC<ContentPanelProps> = ({ section, isTransitioning, onNavigate }) => {
   const [currentCommand, setCurrentCommand] = useState('');
   const [showContent, setShowContent] = useState(false);
 
@@ -44,7 +45,11 @@ const ContentPanel: React.FC<ContentPanelProps> = ({ section, isTransitioning })
     <div className="terminal-panel h-full flex flex-col">
       <div className="flex-1 overflow-y-auto p-4 max-h-full">
         <div className={`transition-opacity duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-          <TerminalCommandInterface onCommand={handleCommand} currentSection={section} />
+          <TerminalCommandInterface 
+            onCommand={handleCommand} 
+            currentSection={section}
+            onNavigate={onNavigate}
+          />
           <div className="overflow-y-auto max-h-96">
             {renderSection()}
           </div>

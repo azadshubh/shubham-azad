@@ -4,12 +4,18 @@ import React, { useState, useRef, useEffect } from 'react';
 interface TerminalCommandInterfaceProps {
   onCommand: (command: string) => void;
   currentSection: string;
+  onNavigate?: (section: string) => void;
 }
 
-const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({ onCommand, currentSection }) => {
+const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({ 
+  onCommand, 
+  currentSection, 
+  onNavigate 
+}) => {
   const [input, setInput] = useState('');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [executedCommands, setExecutedCommands] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const sectionCommands = {
@@ -23,7 +29,33 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({ onC
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
+      const command = input.trim().toLowerCase();
+      
+      // Handle navigation commands
+      if (command === 'projects' || command === 'project') {
+        if (onNavigate) {
+          onNavigate('projects');
+        }
+        setInput('');
+        return;
+      }
+      
+      // Handle section navigation commands
+      const sectionMap: { [key: string]: string } = {
+        'about': 'about',
+        'skills': 'skills',
+        'resume': 'resume',
+        'contact': 'contact'
+      };
+      
+      if (sectionMap[command] && onNavigate) {
+        onNavigate(sectionMap[command]);
+        setInput('');
+        return;
+      }
+      
       setCommandHistory(prev => [...prev, input]);
+      setExecutedCommands(prev => [...prev, input]);
       setHistoryIndex(-1);
       onCommand(input);
       setInput('');
@@ -90,6 +122,7 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({ onC
                 key={index}
                 onClick={() => {
                   setInput(cmd);
+                  setExecutedCommands(prev => [...prev, cmd]);
                   onCommand(cmd);
                 }}
                 className="px-2 py-1 bg-green-800/30 text-green-400 text-xs rounded hover:bg-green-800/50 transition-colors"
@@ -101,11 +134,19 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({ onC
         </div>
       )}
       
-      {commandHistory.length > 0 && (
+      <div className="mb-4 p-3 bg-green-900/10 rounded border border-green-800">
+        <div className="text-green-600 text-xs mb-2">Navigation Commands:</div>
+        <div className="text-green-500 text-xs space-y-1">
+          <div>• Type "projects" or "project" to go to projects section</div>
+          <div>• Type "about", "skills", "resume", or "contact" to navigate</div>
+        </div>
+      </div>
+      
+      {executedCommands.length > 0 && (
         <div className="mb-4">
-          <div className="text-green-600 text-xs mb-2">Command History:</div>
+          <div className="text-green-600 text-xs mb-2">Executed Commands:</div>
           <div className="text-green-500 text-xs space-y-1 max-h-20 overflow-y-auto">
-            {commandHistory.slice(-5).map((cmd, index) => (
+            {executedCommands.slice(-5).map((cmd, index) => (
               <div key={index}>$ {cmd}</div>
             ))}
           </div>
