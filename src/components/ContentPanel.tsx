@@ -42,15 +42,15 @@ const ContentPanel: React.FC<ContentPanelProps> = ({ section, isTransitioning, o
   };
 
   return (
-    <div className="terminal-panel h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4 max-h-full">
+    <div className="h-full flex flex-col bg-black/50">
+      <div className="flex-1 overflow-y-auto p-4">
         <div className={`transition-opacity duration-200 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
           <TerminalCommandInterface 
             onCommand={handleCommand} 
             currentSection={section}
             onNavigate={onNavigate}
           />
-          <div className="overflow-y-auto max-h-96">
+          <div className="mt-4 border-t border-cyan-500/30 pt-4">
             {renderSection()}
           </div>
         </div>

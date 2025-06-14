@@ -13,27 +13,24 @@ const TerminalHeader = () => {
   }, []);
 
   return (
-    <div className="terminal-panel p-4">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center space-x-4">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500 glow-red"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500 glow-yellow"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500 glow-green"></div>
+    <div className="h-full flex items-center justify-between px-4 bg-gradient-to-r from-gray-900 to-gray-800">
+      <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-3">
+          <div className="text-cyan-300 text-sm uppercase tracking-wider">PORTFOLIO TERMINAL</div>
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 bg-red-500 border border-red-400"></div>
+            <div className="w-2 h-2 bg-yellow-500 border border-yellow-400"></div>
+            <div className="w-2 h-2 bg-green-500 border border-green-400"></div>
           </div>
-          <span className="text-green-300">portfolio@terminal:~$</span>
         </div>
-        
-        <div className="flex items-center space-x-6 text-sm">
-          <div className="text-green-400">
-            CPU: <span className="text-green-300">45%</span>
-          </div>
-          <div className="text-green-400">
-            MEM: <span className="text-green-300">2.1GB</span>
-          </div>
-          <div className="text-green-400">
-            {currentTime.toLocaleTimeString()}
-          </div>
+      </div>
+      
+      <div className="flex items-center space-x-6 text-xs text-cyan-400">
+        <div className="border border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          {currentTime.toLocaleTimeString()}
+        </div>
+        <div className="border border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          SESSION: ACTIVE
         </div>
       </div>
     </div>

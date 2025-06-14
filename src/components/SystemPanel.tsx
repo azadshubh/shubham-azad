@@ -28,7 +28,7 @@ const SystemPanel = () => {
       
       setLogs(prev => {
         const newLogs = [...prev, `[${timestamp}] ${randomMessage}`];
-        return newLogs.slice(-10); // Keep only last 10 logs
+        return newLogs.slice(-10);
       });
     }, 5000);
 
@@ -43,51 +43,59 @@ const SystemPanel = () => {
   };
 
   return (
-    <div className="space-y-4 h-full overflow-y-auto">
+    <div className="h-full flex flex-col p-3 space-y-3">
       {/* System Stats */}
-      <div className="terminal-panel p-4">
-        <h3 className="text-green-300 mb-3">$ system status</h3>
-        <div className="space-y-2 text-sm">
+      <div className="border border-cyan-500/30 bg-gray-800/30">
+        <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          <div className="text-xs text-cyan-300 uppercase tracking-wider">STATUS</div>
+        </div>
+        <div className="p-2 space-y-1 text-xs">
           <div className="flex justify-between">
-            <span className="text-green-500">Uptime:</span>
-            <span className="text-green-400">{formatUptime(uptime)}</span>
+            <span className="text-cyan-500">UPTIME</span>
+            <span className="text-cyan-400 font-mono">{formatUptime(uptime)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-500">Status:</span>
-            <span className="text-green-400">Online</span>
+            <span className="text-cyan-500">STATUS</span>
+            <span className="text-green-400">ONLINE</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-500">Load:</span>
-            <span className="text-green-400">0.42</span>
+            <span className="text-cyan-500">LOAD</span>
+            <span className="text-cyan-400 font-mono">0.42</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-500">Processes:</span>
-            <span className="text-green-400">127</span>
+            <span className="text-cyan-500">PROC</span>
+            <span className="text-cyan-400 font-mono">127</span>
           </div>
         </div>
       </div>
 
       {/* Activity Monitor */}
-      <div className="terminal-panel p-4 flex-1 min-h-0">
-        <h3 className="text-green-300 mb-3">$ tail -f /var/log/portfolio</h3>
-        <div className="space-y-1 text-xs overflow-y-auto max-h-48">
-          {logs.map((log, index) => (
-            <div key={index} className="text-green-600 hover:text-green-400 transition-colors">
-              {log}
-            </div>
-          ))}
-          <div className="text-green-400 animate-pulse">_</div>
+      <div className="flex-1 border border-cyan-500/30 bg-gray-800/30 min-h-0">
+        <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          <div className="text-xs text-cyan-300 uppercase tracking-wider">LOGS</div>
+        </div>
+        <div className="p-2 h-full overflow-y-auto">
+          <div className="space-y-1 text-xs">
+            {logs.map((log, index) => (
+              <div key={index} className="text-cyan-600 hover:text-cyan-400 transition-colors font-mono">
+                {log}
+              </div>
+            ))}
+            <div className="text-cyan-400 animate-pulse">█</div>
+          </div>
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="terminal-panel p-4">
-        <h3 className="text-green-300 mb-3">$ df -h</h3>
-        <div className="space-y-1 text-xs">
-          <div className="text-green-500">Filesystem    Size  Used Avail</div>
-          <div className="text-green-600">/skills       8.0G  7.2G  800M</div>
-          <div className="text-green-600">/projects     12G   9.1G  2.9G</div>
-          <div className="text-green-600">/experience   4.0G  3.8G  200M</div>
+      {/* Storage Stats */}
+      <div className="border border-cyan-500/30 bg-gray-800/30">
+        <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          <div className="text-xs text-cyan-300 uppercase tracking-wider">STORAGE</div>
+        </div>
+        <div className="p-2 space-y-1 text-xs font-mono">
+          <div className="text-cyan-500">Filesystem    Size  Used</div>
+          <div className="text-cyan-600">/skills       8.0G  7.2G</div>
+          <div className="text-cyan-600">/projects     12G   9.1G</div>
+          <div className="text-cyan-600">/experience   4.0G  3.8G</div>
         </div>
       </div>
     </div>
