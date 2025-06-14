@@ -4,7 +4,6 @@ import TerminalHeader from './TerminalHeader';
 import NavigationPanel from './NavigationPanel';
 import ContentPanel from './ContentPanel';
 import SystemPanel from './SystemPanel';
-import PixelGlobe from './PixelGlobe';
 
 const TerminalInterface = () => {
   const [currentSection, setCurrentSection] = useState('about');
@@ -76,7 +75,7 @@ const TerminalInterface = () => {
         <div className="h-8 border border-cyan-500/30 bg-gray-900/50 flex items-center px-3">
           <span className="text-cyan-500 text-xs">STATUS: ONLINE</span>
           <div className="ml-auto flex items-center space-x-4 text-xs text-cyan-400">
-            <PixelGlobe />
+            <span>NET: 127.0.0.1</span>
           </div>
         </div>
       </div>

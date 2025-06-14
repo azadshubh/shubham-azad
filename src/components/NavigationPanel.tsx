@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { User, Code, Wrench, FileText, Mail } from 'lucide-react';
+import PixelGlobe from './PixelGlobe';
 
 interface NavigationPanelProps {
   currentSection: string;
@@ -63,7 +64,16 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ currentSection, onNav
           })}
         </div>
         
-        <div className="mt-6 border border-cyan-500/30 bg-gray-800/30">
+        <div className="mt-6 mb-6 border border-cyan-500/30 bg-gray-800/30">
+          <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+            <div className="text-xs text-cyan-300 uppercase tracking-wider">NETWORK</div>
+          </div>
+          <div className="p-3">
+            <PixelGlobe />
+          </div>
+        </div>
+        
+        <div className="border border-cyan-500/30 bg-gray-800/30">
           <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
             <div className="text-xs text-cyan-300 uppercase tracking-wider">HELP</div>
           </div>
