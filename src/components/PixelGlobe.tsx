@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 
 const PixelGlobe = () => {
@@ -163,14 +162,14 @@ const PixelGlobe = () => {
       }
       
       // Add network activity dots
-      for (let i = 0; i < 6; i++) {
-        const angle = (Date.now() / 1000 + i * 1.2) % (Math.PI * 2);
-        const x = centerX + Math.cos(angle) * (radiusX * 0.9);
-        const y = centerY + Math.sin(angle) * (radiusY * 0.9);
+      // for (let i = 0; i < 6; i++) {
+      //   const angle = (Date.now() / 1000 + i * 1.2) % (Math.PI * 2);
+      //   const x = centerX + Math.cos(angle) * (radiusX * 0.9);
+      //   const y = centerY + Math.sin(angle) * (radiusY * 0.9);
         
-        ctx.fillStyle = '#ffff00';
-        ctx.fillRect(Math.floor(x), Math.floor(y), 2, 2);
-      }
+      //   ctx.fillStyle = '#ffff00';
+      //   ctx.fillRect(Math.floor(x), Math.floor(y), 2, 2);
+      // }
     };
 
     drawContinentalGlobe();
