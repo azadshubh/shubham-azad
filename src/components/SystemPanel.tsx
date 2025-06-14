@@ -1,9 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 const SystemPanel = () => {
   const [uptime, setUptime] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
+  const [cpuData, setCpuData] = useState<Array<{ time: string, value: number }>>([]);
+  const [ramData, setRamData] = useState<Array<{ time: string, value: number }>>([]);
   const [currentCpu, setCurrentCpu] = useState(45);
   const [currentRam, setCurrentRam] = useState(2.1);
 
@@ -39,6 +42,8 @@ const SystemPanel = () => {
 
   useEffect(() => {
     const performanceTimer = setInterval(() => {
+      const now = new Date().toLocaleTimeString();
+      
       // Generate realistic CPU usage (20-80%)
       const newCpu = Math.floor(Math.random() * 60) + 20;
       setCurrentCpu(newCpu);
@@ -46,6 +51,16 @@ const SystemPanel = () => {
       // Generate realistic RAM usage (1.5-3.5GB)
       const newRam = Math.random() * 2 + 1.5;
       setCurrentRam(Math.round(newRam * 10) / 10);
+      
+      setCpuData(prev => {
+        const newData = [...prev, { time: now, value: newCpu }];
+        return newData.slice(-20); // Keep last 20 data points
+      });
+      
+      setRamData(prev => {
+        const newData = [...prev, { time: now, value: newRam }];
+        return newData.slice(-20); // Keep last 20 data points
+      });
     }, 2000);
 
     return () => clearInterval(performanceTimer);
@@ -56,26 +71,6 @@ const SystemPanel = () => {
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const generateAsciiBar = (percentage: number, width: number = 20) => {
-    const filled = Math.floor((percentage / 100) * width);
-    const empty = width - filled;
-    return '█'.repeat(filled) + '░'.repeat(empty);
-  };
-
-  const generateAsciiGraph = (value: number, max: number = 100, height: number = 6) => {
-    const bars = [];
-    const normalizedValue = Math.floor((value / max) * height);
-    
-    for (let i = height; i > 0; i--) {
-      if (i <= normalizedValue) {
-        bars.push('██');
-      } else {
-        bars.push('  ');
-      }
-    }
-    return bars;
   };
 
   return (
@@ -110,15 +105,20 @@ const SystemPanel = () => {
         <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
           <div className="text-xs text-cyan-300 uppercase tracking-wider">CPU: {currentCpu}%</div>
         </div>
-        <div className="p-2">
-          <div className="font-mono text-xs text-cyan-400 mb-1">
-            {generateAsciiBar(currentCpu)}
-          </div>
-          <div className="flex space-x-1 font-mono text-xs">
-            {generateAsciiGraph(currentCpu).map((bar, i) => (
-              <span key={i} className="text-cyan-400">{bar}</span>
-            ))}
-          </div>
+        <div className="p-2 h-20">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={cpuData}>
+              <XAxis dataKey="time" hide />
+              <YAxis hide domain={[0, 100]} />
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#22d3ee" 
+                strokeWidth={1}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
@@ -127,15 +127,20 @@ const SystemPanel = () => {
         <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
           <div className="text-xs text-cyan-300 uppercase tracking-wider">RAM: {currentRam}GB</div>
         </div>
-        <div className="p-2">
-          <div className="font-mono text-xs text-green-400 mb-1">
-            {generateAsciiBar((currentRam / 4) * 100)}
-          </div>
-          <div className="flex space-x-1 font-mono text-xs">
-            {generateAsciiGraph((currentRam / 4) * 100).map((bar, i) => (
-              <span key={i} className="text-green-400">{bar}</span>
-            ))}
-          </div>
+        <div className="p-2 h-20">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={ramData}>
+              <XAxis dataKey="time" hide />
+              <YAxis hide domain={[0, 4]} />
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#10b981" 
+                strokeWidth={1}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 

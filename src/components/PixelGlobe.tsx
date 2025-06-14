@@ -1,7 +1,7 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 
 const PixelGlobe = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
   const [networkData, setNetworkData] = useState({
     connections: 127,
@@ -11,50 +11,6 @@ const PixelGlobe = () => {
     browser: 'Loading...',
     location: 'Loading...'
   });
-
-  // ASCII Earth frames for rotation effect
-  const earthFrames = [
-    [
-      "     .-..-. ",
-      "   .-'     '-.",
-      "  /  o     o  \\",
-      " |      ^      |",
-      " |    \\_/     |",
-      "  \\           /",
-      "   '-._   _.-'",
-      "       '-'    "
-    ],
-    [
-      "     .-..-. ",
-      "   .-'     '-.",
-      "  /   .   .   \\",
-      " |     ___     |",
-      " |   /     \\   |",
-      "  \\  \\_____/  /",
-      "   '-._   _.-'",
-      "       '-'    "
-    ],
-    [
-      "     .-..-. ",
-      "   .-'     '-.",
-      "  /  ∞     ∞  \\",
-      " |             |",
-      " |     ___     |",
-      "  \\   /   \\   /",
-      "   '-.\\_____.-'",
-      "       '-'    "
-    ],
-    [
-      "     .-..-. ",
-      "   .-'     '-.",
-      "  /     ◊     \\",
-      " |   ◊     ◊   |",
-      " |      ◊      |",
-      "  \\     ◊     /",
-      "   '-._   _.-'",
-      "       '-'    "
-    ]
-  ];
 
   // Fetch real user data
   useEffect(() => {
@@ -95,9 +51,68 @@ const PixelGlobe = () => {
   }, []);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const size = 60;
+    canvas.width = size;
+    canvas.height = size;
+
+    const drawPixelGlobe = () => {
+      ctx.clearRect(0, 0, size, size);
+      
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = 25;
+      
+      // Draw pixelated globe
+      for (let y = 0; y < size; y += 2) {
+        for (let x = 0; x < size; x += 2) {
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance <= radius) {
+            // Calculate 3D position considering rotation
+            const angle = Math.atan2(dy, dx) + rotation;
+            const intensity = Math.cos(angle * 2) * 0.5 + 0.5;
+            
+            // Create land/ocean pattern
+            const landPattern = Math.sin(angle * 4) * Math.cos(angle * 3) > 0.2;
+            
+            if (landPattern) {
+              // Land - green tones
+              const green = Math.floor(intensity * 100 + 100);
+              ctx.fillStyle = `rgb(0, ${green}, 0)`;
+            } else {
+              // Ocean - blue tones
+              const blue = Math.floor(intensity * 150 + 50);
+              ctx.fillStyle = `rgb(0, 100, ${blue})`;
+            }
+            
+            ctx.fillRect(x, y, 2, 2);
+          }
+        }
+      }
+      
+      // Add atmosphere glow
+      ctx.strokeStyle = '#22d3ee';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius + 2, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    drawPixelGlobe();
+  }, [rotation]);
+
+  useEffect(() => {
     const rotationTimer = setInterval(() => {
-      setRotation(prev => (prev + 1) % earthFrames.length);
-    }, 800);
+      setRotation(prev => prev + 0.02);
+    }, 50);
 
     return () => clearInterval(rotationTimer);
   }, []);
@@ -115,17 +130,15 @@ const PixelGlobe = () => {
     return () => clearInterval(dataTimer);
   }, []);
 
-  const currentFrame = earthFrames[rotation];
-
   return (
     <div className="space-y-3">
       <div className="flex items-center space-x-3">
         <div className="relative">
-          <div className="border border-cyan-500/30 bg-gray-900/50 p-2 font-mono text-xs text-cyan-400 leading-none">
-            {currentFrame.map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </div>
+          <canvas 
+            ref={canvasRef}
+            className="border border-cyan-500/30"
+            style={{ imageRendering: 'pixelated' }}
+          />
           <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
         </div>
         <div className="text-xs space-y-1">
