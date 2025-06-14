@@ -6,34 +6,34 @@ const SkillsSection = () => {
     {
       category: 'Programming Languages',
       skills: [
-        { name: 'C/C++', level: 90, years: 3 },
-        { name: 'Java', level: 85, years: 2 },
-        { name: 'Python', level: 88, years: 2 },
-        { name: 'JavaScript', level: 82, years: 2 },
-        { name: 'Dart', level: 75, years: 1 },
-        { name: 'PHP', level: 80, years: 2 }
+        { name: 'C/C++', years: 3 },
+        { name: 'Java', years: 2 },
+        { name: 'Python', years: 2 },
+        { name: 'JavaScript', years: 2 },
+        { name: 'Dart', years: 1 },
+        { name: 'PHP', years: 2 }
       ]
     },
     {
       category: 'Developer Tools',
       skills: [
-        { name: 'VS Code', level: 95, years: 3 },
-        { name: 'Git', level: 88, years: 2 },
-        { name: 'GitHub', level: 85, years: 2 },
-        { name: 'Docker', level: 78, years: 1 },
-        { name: 'Bash Script', level: 80, years: 2 }
+        { name: 'VS Code', years: 3 },
+        { name: 'Git', years: 2 },
+        { name: 'GitHub', years: 2 },
+        { name: 'Docker', years: 1 },
+        { name: 'Bash Script', years: 2 }
       ]
     },
     {
       category: 'Technologies/Frameworks',
       skills: [
-        { name: 'Flutter', level: 82, years: 1 },
-        { name: 'Node.js', level: 80, years: 2 },
-        { name: 'React.js', level: 85, years: 2 },
-        { name: 'Next.js', level: 75, years: 1 },
-        { name: 'Linux', level: 88, years: 3 },
-        { name: 'Grafana', level: 70, years: 1 },
-        { name: 'Prometheus', level: 68, years: 1 }
+        { name: 'Flutter', years: 1 },
+        { name: 'Node.js', years: 2 },
+        { name: 'React.js', years: 2 },
+        { name: 'Next.js', years: 1 },
+        { name: 'Linux', years: 3 },
+        { name: 'Grafana', years: 1 },
+        { name: 'Prometheus', years: 1 }
       ]
     }
   ];
@@ -57,19 +57,11 @@ const SkillsSection = () => {
               └── {category.category.toLowerCase().replace(/\s+/g, '_')}/
             </h3>
             
-            <div className="space-y-3 ml-4">
+            <div className="space-y-2 ml-4">
               {category.skills.map((skill, skillIndex) => (
-                <div key={skillIndex} className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-green-500">{skill.name}</span>
-                    <span className="text-green-600">{skill.years}y • {skill.level}%</span>
-                  </div>
-                  <div className="w-full bg-gray-800 rounded-full h-2">
-                    <div 
-                      className="bg-green-400 h-2 rounded-full transition-all duration-1000 glow-green"
-                      style={{ width: `${skill.level}%` }}
-                    ></div>
-                  </div>
+                <div key={skillIndex} className="flex justify-between items-center">
+                  <span className="text-green-500">{skill.name}</span>
+                  <span className="text-green-600">{skill.years}y</span>
                 </div>
               ))}
             </div>
