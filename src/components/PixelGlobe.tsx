@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 
 const PixelGlobe = () => {
@@ -57,61 +58,68 @@ const PixelGlobe = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const size = 60;
-    canvas.width = size;
-    canvas.height = size;
+    const width = 200;
+    const height = 160;
+    canvas.width = width;
+    canvas.height = height;
 
-    const drawPixelGlobe = () => {
-      ctx.clearRect(0, 0, size, size);
+    const drawDotGlobe = () => {
+      ctx.clearRect(0, 0, width, height);
       
-      const centerX = size / 2;
-      const centerY = size / 2;
-      const radius = 25;
+      // Set background to dark
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, 0, width, height);
       
-      // Draw pixelated globe
-      for (let y = 0; y < size; y += 2) {
-        for (let x = 0; x < size; x += 2) {
-          const dx = x - centerX;
-          const dy = y - centerY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const radiusX = 60;
+      const radiusY = 50;
+      
+      // Draw globe dots
+      for (let lat = -90; lat <= 90; lat += 6) {
+        for (let lon = -180; lon <= 180; lon += 6) {
+          // Convert spherical to 2D coordinates with rotation
+          const rotatedLon = lon + (rotation * 180 / Math.PI);
+          const x = centerX + (radiusX * Math.cos(lat * Math.PI / 180) * Math.sin(rotatedLon * Math.PI / 180));
+          const y = centerY - (radiusY * Math.sin(lat * Math.PI / 180));
           
-          if (distance <= radius) {
-            // Calculate 3D position considering rotation
-            const angle = Math.atan2(dy, dx) + rotation;
-            const intensity = Math.cos(angle * 2) * 0.5 + 0.5;
-            
+          // Only draw dots on the visible hemisphere
+          const visible = Math.cos(lat * Math.PI / 180) * Math.cos(rotatedLon * Math.PI / 180) > 0;
+          
+          if (visible && x >= 0 && x < width && y >= 0 && y < height) {
             // Create land/ocean pattern
-            const landPattern = Math.sin(angle * 4) * Math.cos(angle * 3) > 0.2;
+            const landPattern = Math.sin(lat * Math.PI / 90) * Math.cos(lon * Math.PI / 60) > 0.1;
             
             if (landPattern) {
-              // Land - green tones
-              const green = Math.floor(intensity * 100 + 100);
-              ctx.fillStyle = `rgb(0, ${green}, 0)`;
+              // Land dots - brighter
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
             } else {
-              // Ocean - blue tones
-              const blue = Math.floor(intensity * 150 + 50);
-              ctx.fillStyle = `rgb(0, 100, ${blue})`;
+              // Ocean dots - dimmer
+              ctx.fillStyle = '#666666';
+              ctx.fillRect(Math.floor(x), Math.floor(y), 1, 1);
             }
-            
-            ctx.fillRect(x, y, 2, 2);
           }
         }
       }
       
-      // Add atmosphere glow
-      ctx.strokeStyle = '#22d3ee';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius + 2, 0, Math.PI * 2);
-      ctx.stroke();
+      // Add some random network activity dots
+      for (let i = 0; i < 8; i++) {
+        const angle = (Date.now() / 1000 + i * 0.8) % (Math.PI * 2);
+        const x = centerX + Math.cos(angle) * (radiusX * 0.8);
+        const y = centerY + Math.sin(angle) * (radiusY * 0.8);
+        
+        ctx.fillStyle = '#00ffff';
+        ctx.fillRect(Math.floor(x), Math.floor(y), 2, 2);
+      }
     };
 
-    drawPixelGlobe();
+    drawDotGlobe();
   }, [rotation]);
 
   useEffect(() => {
     const rotationTimer = setInterval(() => {
-      setRotation(prev => prev + 0.02);
+      setRotation(prev => prev + 0.01);
     }, 50);
 
     return () => clearInterval(rotationTimer);
@@ -132,20 +140,36 @@ const PixelGlobe = () => {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center space-x-3">
-        <div className="relative">
-          <canvas 
-            ref={canvasRef}
-            className="border border-cyan-500/30"
-            style={{ imageRendering: 'pixelated' }}
-          />
-          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+      <div className="relative">
+        {/* Globe Canvas */}
+        <canvas 
+          ref={canvasRef}
+          className="border border-cyan-500/30 bg-black"
+          style={{ imageRendering: 'pixelated' }}
+        />
+        
+        {/* Overlay Labels */}
+        <div className="absolute top-1 left-1 text-xs text-cyan-400 font-mono">
+          WORLD VIEW
         </div>
-        <div className="text-xs space-y-1">
-          <div className="text-cyan-400">CONN: {networkData.connections}</div>
-          <div className="text-cyan-500">PKT: {networkData.packets}</div>
-          <div className="text-cyan-300">{networkData.bandwidth}</div>
+        <div className="absolute top-1 right-1 text-xs text-cyan-600 font-mono">
+          GLOBAL NETWORK MAP
         </div>
+        <div className="absolute bottom-1 left-1 text-xs text-cyan-500 font-mono">
+          ENDPOINT LAT/LON
+        </div>
+        <div className="absolute bottom-1 right-1 text-xs text-cyan-400 font-mono">
+          12.8759, 77.591
+        </div>
+        
+        {/* Status indicator */}
+        <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+      </div>
+      
+      <div className="text-xs space-y-1">
+        <div className="text-cyan-400">CONN: {networkData.connections}</div>
+        <div className="text-cyan-500">PKT: {networkData.packets}</div>
+        <div className="text-cyan-300">{networkData.bandwidth}</div>
       </div>
       
       <div className="border-t border-cyan-500/20 pt-2 space-y-1 text-xs">
