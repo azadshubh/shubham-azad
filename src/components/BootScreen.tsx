@@ -45,28 +45,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-green-400 font-mono p-8">
       <div className="mb-8">
-        <div className="loader">
-          <div className="loader-inner">
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-            <div className="loader-line-wrap">
-              <div className="loader-line"></div>
-            </div>
-          </div>
-        </div>
+        <div className="w-16 h-16 border-4 border-green-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
       
       <div className="text-center max-w-2xl">
