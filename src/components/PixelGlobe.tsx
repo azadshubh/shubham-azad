@@ -1,116 +1,157 @@
+import React, { useEffect, useRef, useState } from 'react';
 
-import React, { useEffect, useState } from 'react';
+const PixelGlobe = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [rotation, setRotation] = useState(0);
+  const [networkData, setNetworkData] = useState({
+    connections: 127,
+    packets: 0,
+    bandwidth: '2.4 Mbps',
+    ipAddress: 'Loading...',
+    browser: 'Loading...',
+    location: 'Loading...'
+  });
 
-const worldViewTitle = "WORLD VIEW";
-const globalMapTitle = "GLOBAL NETWORK MAP";
-
-const ASCII_FRAMES = [
-  [
-    "        . . .       ",
-    "     .         .    ",
-    "   .   O   O     .  ",
-    "  .   O   O   O   . ",
-    "  .   O   O   O   . ",
-    "   .     O   O   .  ",
-    "     .         .    ",
-    "        . . .       ",
-  ],
-  [
-    "        . . .       ",
-    "     .         .    ",
-    "   .   O     O   .  ",
-    "  .   O   O   O   . ",
-    "  .   O   O   O   . ",
-    "   .   O     O   .  ",
-    "     .         .    ",
-    "        . . .       ",
-  ],
-  [
-    "        . . .       ",
-    "     .         .    ",
-    "   .     O   O   .  ",
-    "  .   O   O   O   . ",
-    "  .   O   O   O   . ",
-    "   .   O   O     .  ",
-    "     .         .    ",
-    "        . . .       ",
-  ],
-];
-
-const globeColors = {
-  dot: "text-cyan-400",
-  circle: "text-cyan-600",
-};
-
-const getAsciiFrame = (step: number) => {
-  const idx = step % ASCII_FRAMES.length;
-  return ASCII_FRAMES[idx];
-};
-
-const PixelGlobe: React.FC = () => {
-  const [step, setStep] = useState(0);
-  const [coords, setCoords] = useState<{ lat: number; lon: number }>({ lat: 0, lon: 0 });
-
+  // Fetch real user data
   useEffect(() => {
-    const timer = setInterval(() => {
-      setStep((prev) => prev + 1);
-      setCoords({
-        lat: 10 + 30 * Math.sin(Date.now() / 2400),
-        lon: ((Date.now() / 400) % 360) - 180,
-      });
-    }, 300);
-    return () => clearInterval(timer);
+    const fetchUserData = async () => {
+      try {
+        // Get real browser info
+        const userAgent = navigator.userAgent;
+        const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/([0-9.]+)/);
+        const browserInfo = browserMatch ? `${browserMatch[1]}/${browserMatch[2]}` : 'Unknown Browser';
+
+        // Get real IP and location
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        setNetworkData(prev => ({
+          ...prev,
+          ipAddress: data.ip || 'Unknown',
+          browser: browserInfo,
+          location: data.city && data.region ? `${data.city}, ${data.region}` : 'Unknown Location'
+        }));
+      } catch (error) {
+        console.log('Could not fetch location data, using fallback');
+        // Fallback to basic browser info only
+        const userAgent = navigator.userAgent;
+        const browserMatch = userAgent.match(/(Chrome|Firefox|Safari|Edge)\/([0-9.]+)/);
+        const browserInfo = browserMatch ? `${browserMatch[1]}/${browserMatch[2]}` : 'Unknown Browser';
+        
+        setNetworkData(prev => ({
+          ...prev,
+          ipAddress: 'Private Network',
+          browser: browserInfo,
+          location: 'Location Unavailable'
+        }));
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  // Get lat/lon for overlay, two decimals and signed
-  const latText = `${coords.lat >= 0 ? "" : "-"}${Math.abs(coords.lat).toFixed(4)}`;
-  const lonText = `${coords.lon >= 0 ? "" : "-"}${Math.abs(coords.lon).toFixed(4)}`;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-  const ascii = getAsciiFrame(step);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const size = 60;
+    canvas.width = size;
+    canvas.height = size;
+
+    const drawPixelGlobe = () => {
+      ctx.clearRect(0, 0, size, size);
+      
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const radius = 25;
+      
+      // Draw pixelated globe
+      for (let y = 0; y < size; y += 2) {
+        for (let x = 0; x < size; x += 2) {
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance <= radius) {
+            // Calculate 3D position considering rotation
+            const angle = Math.atan2(dy, dx) + rotation;
+            const intensity = Math.cos(angle * 2) * 0.5 + 0.5;
+            
+            // Create land/ocean pattern
+            const landPattern = Math.sin(angle * 4) * Math.cos(angle * 3) > 0.2;
+            
+            if (landPattern) {
+              // Land - green tones
+              const green = Math.floor(intensity * 100 + 100);
+              ctx.fillStyle = `rgb(0, ${green}, 0)`;
+            } else {
+              // Ocean - blue tones
+              const blue = Math.floor(intensity * 150 + 50);
+              ctx.fillStyle = `rgb(0, 100, ${blue})`;
+            }
+            
+            ctx.fillRect(x, y, 2, 2);
+          }
+        }
+      }
+      
+      // Add atmosphere glow
+      ctx.strokeStyle = '#22d3ee';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius + 2, 0, Math.PI * 2);
+      ctx.stroke();
+    };
+
+    drawPixelGlobe();
+  }, [rotation]);
+
+  useEffect(() => {
+    const rotationTimer = setInterval(() => {
+      setRotation(prev => prev + 0.02);
+    }, 50);
+
+    return () => clearInterval(rotationTimer);
+  }, []);
+
+  useEffect(() => {
+    const dataTimer = setInterval(() => {
+      setNetworkData(prev => ({
+        ...prev,
+        connections: prev.connections + Math.floor(Math.random() * 3) - 1,
+        packets: prev.packets + Math.floor(Math.random() * 100),
+        bandwidth: `${(Math.random() * 2 + 1.5).toFixed(1)} Mbps`
+      }));
+    }, 3000);
+
+    return () => clearInterval(dataTimer);
+  }, []);
+
   return (
-    <div className="w-full">
-      <div className="relative w-full flex flex-col items-center bg-black rounded-lg p-2 overflow-visible" style={{ width: 175, minHeight: 210 }}>
-        {/* Overlayed labels */}
-        <div className="w-full flex flex-row justify-between text-xs px-1 mb-1" style={{ fontFamily: 'monospace' }}>
-          <span className="text-cyan-200 font-bold">{worldViewTitle}</span>
-          <span className="text-cyan-500">{globalMapTitle}</span>
+    <div className="space-y-3">
+      <div className="flex items-center space-x-3">
+        <div className="relative">
+          <canvas 
+            ref={canvasRef}
+            className="border border-cyan-500/30"
+            style={{ imageRendering: 'pixelated' }}
+          />
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
         </div>
-        <div className="w-full flex flex-row justify-between text-xs px-1" style={{ fontFamily: 'monospace' }}>
-          <span className="text-cyan-400">ENDPOINT LAT/LON</span>
-          <span className="text-cyan-300">{latText}, {lonText}</span>
+        <div className="text-xs space-y-1">
+          <div className="text-cyan-400">CONN: {networkData.connections}</div>
+          <div className="text-cyan-500">PKT: {networkData.packets}</div>
+          <div className="text-cyan-300">{networkData.bandwidth}</div>
         </div>
-        {/* ASCII globe */}
-        <div className="flex justify-center items-center my-2" style={{ height: 164 }}>
-          <pre
-            className="leading-5 text-center select-none font-mono"
-            style={{
-              color: "#22d3ee", // cyan-400
-              fontSize: 18,
-              letterSpacing: 3.3,
-              marginTop: 10,
-              marginBottom: 10,
-              width: 155,
-              textShadow: "0 0 4px #155e75cc"
-            }}
-          >
-            {ascii.map((line, i) => (
-              <span key={i} className="block">
-                {
-                  line.split("").map((ch, j) => {
-                    if (ch === "O") {
-                      return <span key={j} className="text-yellow-400 animate-pulse">•</span>;
-                    }
-                    if (ch === ".") {
-                      return <span key={j} className="text-cyan-700">·</span>;
-                    }
-                    if (ch === " ") return " ";
-                    return ch;
-                  })
-                }
-              </span>
-            ))}
-          </pre>
-        </div>
+      </div>
+      
+      <div className="border-t border-cyan-500/20 pt-2 space-y-1 text-xs">
+        <div className="text-cyan-400">IP: {networkData.ipAddress}</div>
+        <div className="text-cyan-500">UA: {networkData.browser}</div>
+        <div className="text-cyan-300">LOC: {networkData.location}</div>
       </div>
     </div>
   );
