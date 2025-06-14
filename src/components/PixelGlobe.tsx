@@ -1,10 +1,9 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 
 const PixelGlobe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
-  const [cpuUsage, setCpuUsage] = useState(0);
-  const [ramUsage, setRamUsage] = useState(0);
   const [networkData, setNetworkData] = useState({
     connections: 127,
     packets: 0,
@@ -13,43 +12,6 @@ const PixelGlobe = () => {
     browser: 'Loading...',
     location: 'Loading...'
   });
-
-  // Monitor CPU and RAM usage
-  useEffect(() => {
-    const monitorPerformance = () => {
-      // Simulate CPU usage calculation
-      const startTime = performance.now();
-      let iterations = 0;
-      const testStart = performance.now();
-      
-      // Do some work to measure performance
-      while (performance.now() - testStart < 1) {
-        iterations++;
-      }
-      
-      const endTime = performance.now();
-      const executionTime = endTime - startTime;
-      
-      // Calculate CPU usage based on execution time (rough estimation)
-      const cpuPercent = Math.min(Math.max((executionTime / 10) * 100, 15), 85);
-      setCpuUsage(cpuPercent);
-      
-      // Estimate RAM usage using performance.memory if available
-      if ('memory' in performance) {
-        const memory = (performance as any).memory;
-        const ramPercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
-        setRamUsage(Math.min(ramPercent, 90));
-      } else {
-        // Fallback to simulated RAM usage
-        setRamUsage(Math.random() * 30 + 40);
-      }
-    };
-
-    const performanceTimer = setInterval(monitorPerformance, 2000);
-    monitorPerformance(); // Initial call
-
-    return () => clearInterval(performanceTimer);
-  }, []);
 
   // Fetch real user data
   useEffect(() => {
@@ -160,16 +122,6 @@ const PixelGlobe = () => {
           }
         }
       }
-      
-      // Add network activity dots
-      // for (let i = 0; i < 6; i++) {
-      //   const angle = (Date.now() / 1000 + i * 1.2) % (Math.PI * 2);
-      //   const x = centerX + Math.cos(angle) * (radiusX * 0.9);
-      //   const y = centerY + Math.sin(angle) * (radiusY * 0.9);
-        
-      //   ctx.fillStyle = '#ffff00';
-      //   ctx.fillRect(Math.floor(x), Math.floor(y), 2, 2);
-      // }
     };
 
     drawContinentalGlobe();
@@ -219,38 +171,6 @@ const PixelGlobe = () => {
         </div>
         
         <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-      </div>
-      
-      {/* CPU Usage Bar */}
-      <div className="border border-cyan-500/30 bg-gray-800/30">
-        <div className="px-2 py-1 text-xs text-cyan-300 flex justify-between">
-          <span>CPU</span>
-          <span>{Math.round(cpuUsage)}%</span>
-        </div>
-        <div className="px-2 pb-2">
-          <div className="w-full bg-gray-700 h-2">
-            <div 
-              className="h-2 bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all duration-500"
-              style={{ width: `${cpuUsage}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      {/* RAM Usage Bar */}
-      <div className="border border-cyan-500/30 bg-gray-800/30">
-        <div className="px-2 py-1 text-xs text-cyan-300 flex justify-between">
-          <span>RAM</span>
-          <span>{Math.round(ramUsage)}%</span>
-        </div>
-        <div className="px-2 pb-2">
-          <div className="w-full bg-gray-700 h-2">
-            <div 
-              className="h-2 bg-gradient-to-r from-green-500 to-green-400 transition-all duration-500"
-              style={{ width: `${ramUsage}%` }}
-            ></div>
-          </div>
-        </div>
       </div>
       
       <div className="text-xs space-y-1">
