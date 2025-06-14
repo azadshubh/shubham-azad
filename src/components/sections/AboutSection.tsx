@@ -57,28 +57,6 @@ $ echo "Always learning, always innovating."`;
         {displayText}
         <span className="animate-pulse">_</span>
       </div>
-      
-      <div className="mt-6 p-4 bg-green-900/20 rounded border border-green-800">
-        <div className="text-green-400 text-sm mb-2">Quick Facts:</div>
-        <div className="grid grid-cols-2 gap-4 text-xs">
-          <div>
-            <span className="text-green-600">Location:</span>
-            <span className="text-green-400 ml-2">Mangalore, Karnataka</span>
-          </div>
-          <div>
-            <span className="text-green-600">Role:</span>
-            <span className="text-green-400 ml-2">CS Undergraduate</span>
-          </div>
-          <div>
-            <span className="text-green-600">CGPA:</span>
-            <span className="text-green-400 ml-2">7.0/10</span>
-          </div>
-          <div>
-            <span className="text-green-600">Focus:</span>
-            <span className="text-green-400 ml-2">Full Stack Development</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
