@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
@@ -27,6 +26,17 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
     skills: ['cat /proc/skills', 'ls skills/', 'cat specializations.txt'],
     resume: ['cat resume.md', 'cat experience.txt', 'cat education.txt'],
     contact: ['cat contact.txt', 'ping social-media', 'curl -X GET /contact']
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInput(value);
+    
+    // Collapse both panels when user starts typing
+    if (value.length > 0 && (showQuickCommands || showNavigationCommands)) {
+      setShowQuickCommands(false);
+      setShowNavigationCommands(false);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -108,7 +118,7 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
             ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             className="flex-1 bg-transparent border-none outline-none text-cyan-300 font-mono"
             placeholder={`Type a command (e.g., ${quickCommands[0] || 'help'})`}
@@ -117,7 +127,7 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
       </div>
       
       {quickCommands.length > 0 && (
-        <div className="mb-4 border border-cyan-800/30 bg-black/20">
+        <div className="mb-4 border border-cyan-500/30 bg-black/20">
           <button
             onClick={() => setShowQuickCommands(!showQuickCommands)}
             className="w-full flex items-center justify-between p-3 text-cyan-400 hover:bg-cyan-900/10 transition-colors"
@@ -152,7 +162,7 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
         </div>
       )}
       
-      <div className="mb-4 border border-cyan-800/30 bg-black/20">
+      <div className="mb-4 border border-cyan-500/30 bg-black/20">
         <button
           onClick={() => setShowNavigationCommands(!showNavigationCommands)}
           className="w-full flex items-center justify-between p-3 text-cyan-400 hover:bg-cyan-900/10 transition-colors"
