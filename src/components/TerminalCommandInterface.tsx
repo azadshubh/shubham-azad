@@ -16,8 +16,8 @@ const TerminalCommandInterface: React.FC<TerminalCommandInterfaceProps> = ({
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [executedCommands, setExecutedCommands] = useState<string[]>([]);
-  const [showQuickCommands, setShowQuickCommands] = useState(true);
-  const [showNavigationCommands, setShowNavigationCommands] = useState(true);
+  const [showQuickCommands, setShowQuickCommands] = useState(false);
+  const [showNavigationCommands, setShowNavigationCommands] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const sectionCommands = {
