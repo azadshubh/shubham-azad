@@ -75,8 +75,6 @@ const TerminalInterface = () => {
         <div className="h-8 border border-cyan-500/30 bg-gray-900/50 flex items-center px-3">
           <span className="text-cyan-500 text-xs">STATUS: ONLINE</span>
           <div className="ml-auto flex items-center space-x-4 text-xs text-cyan-400">
-            <span>CPU: 45%</span>
-            <span>MEM: 2.1GB</span>
             <span>NET: 127.0.0.1</span>
           </div>
         </div>

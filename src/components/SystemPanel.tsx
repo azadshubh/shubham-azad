@@ -1,9 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 const SystemPanel = () => {
   const [uptime, setUptime] = useState(0);
   const [logs, setLogs] = useState<string[]>([]);
+  const [cpuData, setCpuData] = useState<Array<{ time: string, value: number }>>([]);
+  const [ramData, setRamData] = useState<Array<{ time: string, value: number }>>([]);
+  const [currentCpu, setCurrentCpu] = useState(45);
+  const [currentRam, setCurrentRam] = useState(2.1);
 
   useEffect(() => {
     const uptimeTimer = setInterval(() => {
@@ -33,6 +38,32 @@ const SystemPanel = () => {
     }, 5000);
 
     return () => clearInterval(logTimer);
+  }, []);
+
+  useEffect(() => {
+    const performanceTimer = setInterval(() => {
+      const now = new Date().toLocaleTimeString();
+      
+      // Generate realistic CPU usage (20-80%)
+      const newCpu = Math.floor(Math.random() * 60) + 20;
+      setCurrentCpu(newCpu);
+      
+      // Generate realistic RAM usage (1.5-3.5GB)
+      const newRam = Math.random() * 2 + 1.5;
+      setCurrentRam(Math.round(newRam * 10) / 10);
+      
+      setCpuData(prev => {
+        const newData = [...prev, { time: now, value: newCpu }];
+        return newData.slice(-20); // Keep last 20 data points
+      });
+      
+      setRamData(prev => {
+        const newData = [...prev, { time: now, value: newRam }];
+        return newData.slice(-20); // Keep last 20 data points
+      });
+    }, 2000);
+
+    return () => clearInterval(performanceTimer);
   }, []);
 
   const formatUptime = (seconds: number) => {
@@ -66,6 +97,50 @@ const SystemPanel = () => {
             <span className="text-cyan-500">PROC</span>
             <span className="text-cyan-400 font-mono">127</span>
           </div>
+        </div>
+      </div>
+
+      {/* CPU Usage */}
+      <div className="border border-cyan-500/30 bg-gray-800/30">
+        <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          <div className="text-xs text-cyan-300 uppercase tracking-wider">CPU: {currentCpu}%</div>
+        </div>
+        <div className="p-2 h-20">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={cpuData}>
+              <XAxis dataKey="time" hide />
+              <YAxis hide domain={[0, 100]} />
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#22d3ee" 
+                strokeWidth={1}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* RAM Usage */}
+      <div className="border border-cyan-500/30 bg-gray-800/30">
+        <div className="border-b border-cyan-500/30 px-2 py-1 bg-gray-800/50">
+          <div className="text-xs text-cyan-300 uppercase tracking-wider">RAM: {currentRam}GB</div>
+        </div>
+        <div className="p-2 h-20">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={ramData}>
+              <XAxis dataKey="time" hide />
+              <YAxis hide domain={[0, 4]} />
+              <Line 
+                type="monotone" 
+                dataKey="value" 
+                stroke="#10b981" 
+                strokeWidth={1}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
