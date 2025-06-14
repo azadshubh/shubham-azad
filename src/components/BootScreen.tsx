@@ -60,7 +60,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
       setIsComplete(true);
       setTimeout(() => {
         onComplete();
-      }, 800);
+      }, 2000); // Longer wait after completion
       return;
     }
 
@@ -74,16 +74,16 @@ const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
           return newLines;
         });
         setCurrentCharIndex(prev => prev + 1);
-      }, Math.random() * 15 + 5); // Faster typing: 5-20ms instead of 20-70ms
+      }, Math.random() * 25 + 10); // Slightly slower typing: 10-35ms
 
       return () => clearTimeout(typingTimeout);
     } else {
-      // Line completed, move to next line faster
+      // Line completed, move to next line
       const nextLineTimeout = setTimeout(() => {
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
         setDisplayedLines(prev => [...prev, '']);
-      }, 30); // Faster line completion: 30ms instead of 100ms
+      }, Math.random() * 100 + 50); // Longer pause between lines: 50-150ms
 
       return () => clearTimeout(nextLineTimeout);
     }
